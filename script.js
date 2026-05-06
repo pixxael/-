@@ -1,9 +1,7 @@
-// 📦 250 РУЧНЫХ РЕЦЕПТОВ (компактный формат)
-// Каждый рецепт проверен на соответствие ингредиентов и шагов.
-// КБЖУ: c=ккал, p=белки, f=жиры, k=углеводы
 
+// 📦 250 РУЧНЫХ РЕЦЕПТОВ (компактный формат)
 const manualRecipes = [
-{id:1, title:"Быстрый омлет", ingredients:[{n:"яйца",a:"2 шт"},{n:"молоко 2.5%",a:"50 мл"},{n:"твёрдый сыр",a:"30 г"},{n:"масло",a:"5 г"},{n:"соль",a:"щеп."}], time:"8 мин", kbzhu:{c:240,p:16,f:18,k:2}, steps:["Взбейте яйца с молоком и солью 30 сек.","Разогрейте масло на сковороде.","Вылейте смесь, готовьте 1 мин.","Посыпьте сыром, накройте крышкой на 2 мин."]},
+  {id:1, title:"Быстрый омлет", ingredients:[{n:"яйца",a:"2 шт"},{n:"молоко 2.5%",a:"50 мл"},{n:"твёрдый сыр",a:"30 г"},{n:"масло",a:"5 г"},{n:"соль",a:"щеп."}], time:"8 мин", kbzhu:{c:240,p:16,f:18,k:2}, steps:["Взбейте яйца с молоком и солью 30 сек.","Разогрейте масло на сковороде.","Вылейте смесь, готовьте 1 мин.","Посыпьте сыром, накройте крышкой на 2 мин."]},
 {id:2, title:"Макароны с яйцом", ingredients:[{n:"макароны",a:"200 г"},{n:"яйца",a:"2 шт"},{n:"лук",a:"1 шт"},{n:"масло",a:"15 г"},{n:"соль",a:"1 ч.л."}], time:"15 мин", kbzhu:{c:410,p:14,f:12,k:60}, steps:["Отварите макароны, слейте.","Обжарьте лук 5 мин до прозрачности.","Вбейте яйца, мешайте 1 мин.","Добавьте макароны, прогрейте 1 мин."]},
 {id:3, title:"Картофельная запеканка", ingredients:[{n:"картофель",a:"500 г"},{n:"молоко",a:"150 мл"},{n:"твёрдый сыр",a:"100 г"},{n:"яйцо",a:"1 шт"},{n:"чеснок",a:"2 зуб."}], time:"45 мин", kbzhu:{c:280,p:12,f:9,k:38}, steps:["Нарежьте картофель кружками.","Взбейте молоко, яйцо, чеснок.","Смажьте форму, выложите картофель слоями, залейте.","Посыпьте сыром, запекайте 35 мин при 190°C."]},
 {id:4, title:"Чесночные гренки", ingredients:[{n:"хлеб",a:"4 ломтика"},{n:"чеснок",a:"3 зуб."}, {n:"масло",a:"20 г"},{n:"соль",a:"щеп."}], time:"7 мин", kbzhu:{c:190,p:5,f:10,k:20}, steps:["Обжарьте хлеб до хруста по 2 мин с каждой стороны.","Смешайте масло с давленым чесноком и солью.","Смажьте горячие гренки."]},
@@ -255,7 +253,7 @@ const manualRecipes = [
 {id:250, title:"Куриные ножки с рисом в духовке", ingredients:[{n:"куриные ножки",a:"4 шт"},{n:"рис",a:"200 г"},{n:"морковь",a:"1 шт"},{n:"лук",a:"1 шт"},{n:"специи",a:"1 ч.л."}], time:"45 мин", kbzhu:{c:460,p:24,f:14,k:52}, steps:["Обжарьте лук, морковь 5 мин, добавьте рис, залейте 400 мл воды.","Сверху курицу, специи.","Тушите под крышкой 35 мин при 180°C."]}
 ];
 
-// 🧠 ОСТАЛЬНОЙ КОД (БЕЗ ИЗМЕНЕНИЙ)
+// 🧠 СОСТОЯНИЕ
 const defaultProfile = { name: '', allergies: [], forbidden: [] };
 let rawProfile;
 try { rawProfile = JSON.parse(localStorage.getItem('kitchen_profile')); } catch(e) { rawProfile = null; }
@@ -268,6 +266,7 @@ const state = {
 
 const allRecipes = [...manualRecipes];
 
+// 🔍 УТИЛИТЫ
 const synonyms = {
   'паста': ['макароны','спагетти','лапша','пенне','феттучине'],
   'макароны': ['паста','спагетти','лапша'],
@@ -303,37 +302,16 @@ function isRestricted(recipe) {
   ));
 }
 
-const els = {
-  tabs: document.querySelectorAll('.tab'),
-  navBtns: document.querySelectorAll('nav button'),
-  searchInput: document.getElementById('searchInput'),
-  searchBtn: document.getElementById('searchBtn'),
-  results: document.getElementById('results'),
-  searchInfo: document.getElementById('searchInfo'),
-  favorites: document.getElementById('favorites'),
-  favEmpty: document.getElementById('fav-empty'),
-  pName: document.getElementById('pName'),
-  pAllergies: document.getElementById('pAllergies'),
-  pForbidden: document.getElementById('pForbidden'),
-  saveProfile: document.getElementById('saveProfile'),
-  profileStatus: document.getElementById('profileStatus'),
-  modal: document.getElementById('modal'),
-  modalCloseBtn: document.getElementById('modalCloseBtn'),
-  mTitle: document.getElementById('mTitle'),
-  mKbzhu: document.getElementById('mKbzhu'),
-  mMeta: document.getElementById('mMeta'),
-  mIngredients: document.getElementById('mIngredients'),
-  mSteps: document.getElementById('mSteps')
-};
-
+// 🎛️ ФУНКЦИИ (объявляем ДО DOMContentLoaded)
 function switchTab(tabName) {
   state.tab = tabName;
-  els.tabs.forEach(t => t.classList.toggle('active', t.id === `tab-${tabName}`));
-  els.navBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === tabName));
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.id === `tab-${tabName}`));
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tabName));
   if(tabName === 'favorites') renderFavorites();
 }
 
 function search() {
+  const els = getEls(); // 👈 получаем элементы "на лету"
   const q = normalize(els.searchInput.value);
   localStorage.setItem('last_search', q);
   
@@ -394,6 +372,7 @@ function createCard(r, container, index = 0, isFavView = false) {
 }
 
 function renderFavorites() {
+  const els = getEls();
   const favRecipes = allRecipes.filter(r => state.favorites.includes(r.id));
   els.favorites.innerHTML = '';
   if(favRecipes.length === 0) { els.favEmpty.style.display = 'block'; return; }
@@ -402,6 +381,7 @@ function renderFavorites() {
 }
 
 function openModal(r) {
+  const els = getEls();
   els.mTitle.textContent = r.title;
   els.mKbzhu.innerHTML = `
     <div class="kbzhu-badge"><span>${r.kbzhu.c}</span> ккал</div>
@@ -418,17 +398,20 @@ function openModal(r) {
 }
 
 function closeModal() {
+  const els = getEls();
   els.modal.classList.remove('open');
   document.body.style.overflow = '';
 }
 
 function loadProfile() {
+  const els = getEls();
   els.pName.value = state.profile.name || '';
   els.pAllergies.value = (state.profile.allergies || []).join(', ');
   els.pForbidden.value = (state.profile.forbidden || []).join(', ');
 }
 
 function saveProfileData() {
+  const els = getEls();
   const parseList = txt => txt.split(/[,;]+/).map(s => s.trim().toLowerCase()).filter(Boolean);
   state.profile = {
     name: els.pName.value.trim(),
@@ -441,7 +424,36 @@ function saveProfileData() {
   search();
 }
 
+// 🔑 Функция для "ленивого" получения элементов
+function getEls() {
+  return {
+    tabs: document.querySelectorAll('.tab'),
+    navBtns: document.querySelectorAll('nav button'),
+    searchInput: document.getElementById('searchInput'),
+    searchBtn: document.getElementById('searchBtn'),
+    results: document.getElementById('results'),
+    searchInfo: document.getElementById('searchInfo'),
+    favorites: document.getElementById('favorites'),
+    favEmpty: document.getElementById('fav-empty'),
+    pName: document.getElementById('pName'),
+    pAllergies: document.getElementById('pAllergies'),
+    pForbidden: document.getElementById('pForbidden'),
+    saveProfile: document.getElementById('saveProfile'),
+    profileStatus: document.getElementById('profileStatus'),
+    modal: document.getElementById('modal'),
+    modalCloseBtn: document.getElementById('modalCloseBtn'),
+    mTitle: document.getElementById('mTitle'),
+    mKbzhu: document.getElementById('mKbzhu'),
+    mMeta: document.getElementById('mMeta'),
+    mIngredients: document.getElementById('mIngredients'),
+    mSteps: document.getElementById('mSteps')
+  };
+}
+
+// 🎛️ ИНИЦИАЛИЗАЦИЯ (только когда DOM готов!)
 document.addEventListener('DOMContentLoaded', () => {
+  const els = getEls(); // 👈 Теперь элементы точно существуют
+  
   els.navBtns.forEach(b => b.onclick = () => switchTab(b.dataset.tab));
   els.searchBtn.onclick = search;
   els.searchInput.onkeypress = e => { if(e.key === 'Enter') search(); };
@@ -453,4 +465,5 @@ document.addEventListener('DOMContentLoaded', () => {
   loadProfile();
   els.searchInput.value = localStorage.getItem('last_search') || '';
   search();
+});
 });
