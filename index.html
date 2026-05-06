@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>🍳 Кулинарный Помощник</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>🍳 Что приготовить?</h1>
+  </header>
+
+  <main>
+    <!-- Вкладка: Поиск -->
+    <section id="tab-search" class="tab active">
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Курица, паста, грибы..." autocomplete="off">
+        <button id="searchBtn">🔍</button>
+      </div>
+      <div id="searchInfo" class="info-text"></div>
+      <div id="results" class="grid"></div>
+    </section>
+
+    <!-- Вкладка: Избранное -->
+    <section id="tab-favorites" class="tab">
+      <h2 class="section-header">❤️ Избранное</h2>
+      <div id="favorites" class="grid"></div>
+      <div id="fav-empty" class="empty-state">
+        <div class="emoji">💔</div>
+        <p>Здесь пока пусто.<br>Нажимайте ❤️ на рецептах, чтобы сохранить их.</p>
+      </div>
+    </section>
+
+    <!-- Вкладка: Кабинет -->
+    <section id="tab-profile" class="tab">
+      <div class="profile-card">
+        <h2 class="section-header">👤 Настройки питания</h2>
+        <p class="subtitle">Рецепты с этими продуктами будут скрыты из поиска.</p>
+        
+        <div class="form-group">
+          <label>Ваше имя</label>
+          <input type="text" id="pName" placeholder="Как к вам обращаться?">
+        </div>
+        
+        <div class="form-group">
+          <label>⚠️ Аллергии (через запятую)</label>
+          <textarea id="pAllergies" rows="2" placeholder="орехи, мёд, цитрусовые..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>🚫 Не ем / Запрещено</label>
+          <textarea id="pForbidden" rows="2" placeholder="свинина, лук, грибы, молочное..."></textarea>
+        </div>
+        
+        <button id="saveProfile" class="btn-primary">💾 Сохранить настройки</button>
+        <div id="profileStatus" class="status-msg">✅ Настройки сохранены!</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Навигация -->
+  <nav id="bottomNav">
+    <button class="active" data-tab="search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+      <span>Поиск</span>
+    </button>
+    <button data-tab="favorites">
+      <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+      <span>Избранное</span>
+    </button>
+    <button data-tab="profile">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      <span>Кабинет</span>
+    </button>
+  </nav>
+
+  <!-- Модальное окно рецепта -->
+  <div id="modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="close-handle"></div>
+      <button class="modal-close" id="modalCloseBtn">✕</button>
+      <h2 class="modal-title" id="mTitle"></h2>
+      <div class="kbzhu-wrap" id="mKbzhu"></div>
+      <p class="meta" id="mMeta"></p>
+      
+      <h3 class="section-title">📦 Ингредиенты</h3>
+      <ul class="ingredient-list" id="mIngredients"></ul>
+      
+      <h3 class="section-title">👨‍🍳 Приготовление</h3>
+      <div id="mSteps"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
